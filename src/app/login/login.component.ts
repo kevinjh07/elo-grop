@@ -5,6 +5,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../models/user';
 import { AuthService } from '../services/auth/auth.service';
+import { UserService } from '../services/user/user.service';
 import { mustMatch } from '../shared/validators/must-match';
 
 @Component({
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     public formBuilder: FormBuilder,
     private authService: AuthService,
+    private userService: UserService,
     private toastr: ToastrService
   ) {}
 
@@ -38,14 +40,16 @@ export class LoginComponent implements OnInit {
   }
 
   crateSignUpFormGroup() {
-    this.signUpFormGroup = this.formBuilder.group({
-      userName: ['', [Validators.required, Validators.maxLength(120)]],
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
-    },
-    {
-      validators: mustMatch('password', 'confirmPassword'),
-    });
+    this.signUpFormGroup = this.formBuilder.group(
+      {
+        userName: ['', [Validators.required, Validators.maxLength(120)]],
+        password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
+        confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
+      },
+      {
+        validators: mustMatch('password', 'confirmPassword'),
+      }
+    );
   }
 
   onSignIn() {
@@ -55,12 +59,8 @@ export class LoginComponent implements OnInit {
 
     this.blockUI.start('Aguarde...');
     this.authService.login(this.user).subscribe(
-      (result) => {
-        this.blockUI.stop();
-        if (result) {
-          localStorage.setItem('isLoggedin', 'true');
-          this.router.navigate(['/']);
-        }
+      () => {
+        this.continueLogin();
       },
       (err) => {
         this.blockUI.stop();
@@ -73,5 +73,22 @@ export class LoginComponent implements OnInit {
     if (this.signInFormGroup.invalid) {
       return;
     }
+
+    this.blockUI.start('Aguarde...');
+    this.userService.signUp(this.user).subscribe(
+      () => {
+        this.continueLogin();
+      },
+      (err) => {
+        this.blockUI.stop();
+        this.toastr.error(err.error.payload.message);
+      }
+    );
+  }
+
+  continueLogin() {
+    this.blockUI.stop();
+    localStorage.setItem('isLoggedin', 'true');
+    this.router.navigate(['/']);
   }
 }

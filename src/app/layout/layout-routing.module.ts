@@ -7,7 +7,18 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    children: [],
+    children: [
+      {
+        path: '',
+        loadChildren: './lead/lead.module#LeadModule',
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'leads',
+        loadChildren: './lead/lead.module#LeadModule',
+        canActivate: [AuthGuard],
+      },
+    ],
   },
 ];
 
