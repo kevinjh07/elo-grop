@@ -15,6 +15,13 @@ export class LeadService {
   }
 
   updateStatus(lead: Lead) {
-    return this.http.patch<any>(`${environment.baseApiUrl}/leads/${lead.id}`, { id: lead.id, statusId: lead.statusId });
+    return this.http.patch<ApiResponse | any>(`${environment.baseApiUrl}/leads/${lead.id}`, {
+      id: lead.id,
+      statusId: lead.statusId,
+    });
+  }
+
+  save(lead: Lead) {
+    return this.http.post<ApiResponse>(`${environment.baseApiUrl}/leads`, lead);
   }
 }
