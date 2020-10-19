@@ -1,44 +1,56 @@
 <form [formGroup]="formGroup" (ngSubmit)="save()">
   <div class="mt10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
-    <mat-form-field [fxFlex]="50">
-      <input
-        matInput
-        placeholder="Nome"
-        formControlName="customerName"
-        [(ngModel)]="lead.customerName"
-        maxlength="120"
-        required
-      />
-      <mat-error *ngIf="formGroup.controls.customerName.invalid">Campo obrigatório</mat-error>
-    </mat-form-field>
-  </div>
+    <div [fxFlex]="50">
+      <div class="mt10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <mat-form-field [fxFlex]="100">
+          <input
+            matInput
+            placeholder="Nome"
+            formControlName="customerName"
+            [(ngModel)]="lead.customerName"
+            maxlength="120"
+            required
+          />
+          <mat-error *ngIf="formGroup.controls.customerName.invalid">Campo obrigatório</mat-error>
+        </mat-form-field>
+      </div>
 
-  <div class="mt10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
-    <mat-form-field [fxFlex]="50">
-      <input
-        matInput
-        placeholder="Telefone"
-        formControlName="customerPhone"
-        [(ngModel)]="lead.customerPhone"
-        maxlength="12"
-        required
-      />
-      <mat-error *ngIf="formGroup.controls.customerPhone.invalid">Campo obrigatório</mat-error>
-    </mat-form-field>
-  </div>
+      <div class="mt10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <mat-form-field [fxFlex]="100">
+          <input
+            matInput
+            placeholder="Telefone"
+            formControlName="customerPhone"
+            [(ngModel)]="lead.customerPhone"
+            maxlength="12"
+            required
+          />
+          <mat-error *ngIf="formGroup.controls.customerPhone.invalid">Campo obrigatório</mat-error>
+        </mat-form-field>
+      </div>
 
-  <div class="mt10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
-    <mat-form-field [fxFlex]="50">
-      <input
-        matInput
-        placeholder="Email"
-        formControlName="customerEmail"
-        [(ngModel)]="lead.customerEmail"
-        maxlength="120"
-        required
-      />
-      <mat-error *ngIf="formGroup.controls.customerEmail.invalid">Campo obrigatório</mat-error>
-    </mat-form-field>
+      <div class="mt10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <mat-form-field [fxFlex]="100">
+          <input
+            matInput
+            placeholder="Email"
+            formControlName="customerEmail"
+            [(ngModel)]="lead.customerEmail"
+            maxlength="120"
+            required
+          />
+          <mat-error *ngIf="formGroup.controls.customerEmail.invalid">Campo obrigatório</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div [fxFlex]="50">
+      <mat-selection-list #shoes>
+        <mat-list-option *ngFor="let opportunity of opportunities">
+          {{ opportunity.description }}
+        </mat-list-option>
+      </mat-selection-list>
+    </div>
   </div>
 
   <div class="footer-buttons">

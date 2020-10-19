@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Lead } from 'src/app/models/lead';
 import { LeadService } from 'src/app/services/lead/lead.service';
 import { NavigationService } from 'src/app/services/navigation/navigation.service';
+import { OpportunityService } from 'src/app/services/opportunity/opportunity.service';
 
 @Component({
   selector: 'app-lead-registration',
@@ -16,18 +17,21 @@ export class LeadRegistrationComponent implements OnInit {
   @BlockUI() blockUI: NgBlockUI;
   formGroup: FormGroup;
   lead = new Lead();
+  opportunities: any[];
 
   constructor(
     private leadService: LeadService,
     private toastr: ToastrService,
     public formBuilder: FormBuilder,
     private navigationService: NavigationService,
-    private router: Router
+    private router: Router,
+    private opportunityService: OpportunityService
   ) {}
 
   ngOnInit() {
     this.navigationService.pageTitleSubject.next('Novo Lead');
     this.createFormGroup();
+    this.getOpportunities();
   }
 
   createFormGroup() {
@@ -36,6 +40,17 @@ export class LeadRegistrationComponent implements OnInit {
       customerPhone: ['', [Validators.required, Validators.maxLength(12)]],
       customerEmail: ['', [Validators.required, Validators.maxLength(255)]],
     });
+  }
+
+  getOpportunities() {
+    this.blockUI.start('Aguarde...');
+    this.opportunityService.getOpportunities().subscribe(
+      (response) => {
+        this.blockUI.stop();
+        this.opportunities = response.payload || [];
+      },
+      () => this.blockUI.stop()
+    );
   }
 
   save() {
